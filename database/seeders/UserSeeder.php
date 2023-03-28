@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'password'=>Hash::make('password'),
             'created_at'=>new DateTime(),
             'updated_at'=>new DateTIme(),
-            'sum_play_time'=>'001500'//時間ってどうやって入れる？
+            'sum_play_time'=>'001500'
             ]);
     }
 }
