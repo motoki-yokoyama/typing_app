@@ -1,10 +1,58 @@
 
+
+//タイマー系
+function startStopwatch(display) {
+  var startTime = new Date().getTime();
+  var elapsed = 0;
+
+  // 時間を表示する関数
+  function showTime() {
+    elapsed = new Date().getTime() - startTime;
+    var minutes = Math.floor((elapsed / 1000 / 60) % 60);
+    var seconds = Math.floor((elapsed / 1000) % 60);
+    var milliseconds = Math.floor((elapsed % 1000) / 10);
+
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    milliseconds = milliseconds < 10 ? "0" + milliseconds : milliseconds;
+
+    display.textContent = minutes + ":" + seconds + "." + milliseconds;
+  }
+
+  // ストップウォッチを開始する関数
+  function start() {
+    startTime = new Date().getTime() - elapsed;
+    timerId = setInterval(showTime, 10);
+  }
+
+  // ストップウォッチを停止する関数
+  function stop() {
+    clearInterval(timerId);
+  }
+
+  // ストップウォッチをリセットする関数
+  function reset() {
+    stop();
+    elapsed = 0;
+    display.textContent = "00:00.00";
+  }
+
+  // 関数を返す
+  return {
+    start: start,
+    stop: stop,
+    reset: reset
+  };
+}
+
+//問題表示系
 // 次の問題を表示する
 function showProblem() {
   if (currentProblemIndex >= problems.length) {
     // 全問題が終了したら終了メッセージを表示する
     $('#problem').text('全ての問題を終了しました');
     $('#answer').remove();
+    stopwatch.stop(); // ストップウォッチを停止する
     return;
   }
 
@@ -36,37 +84,4 @@ function checkAnswer() {
     alert('miss');
   }
 }
-
-
-// function buttonClick(e)
-// {
-//     let button=document.createElement("button");
-    
-// }
-
-
-// //問題表示
-// function init()
-// {
-//     //id=questionsのdivタグを変数questions_areaに入れた
-//     let questions_area=document.getElementById("questions");
-    
-//     //問題と入力欄の表示
-//     for (let i=0; i<10; i++){
-//         let question_area=document.createElement("div");
-//         let sentence=document.createElement("p");
-//         sentence.textContent='こんにちは'+i;
-//         let answer=document.createElement("input");
-//         answer.setAttribute("id","question"+i);
-//         //let button=document.createElement("button");
-//         //button.setAttribute("id","button"+i);
-//         //button.addEventListener("click",{handleEvent:buttonClick});
-//         question_area.appendChild(sentence);
-//         question_area.appendChild(answer);
-//         //question_area.appendChild(button);
-//         questions_area.appendChild(question_area);
-//     }
-    
-//     questions_area.appendChild(buttonClick());
-// }
 
