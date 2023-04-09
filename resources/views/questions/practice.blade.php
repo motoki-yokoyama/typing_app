@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
+        <meta name="csrf_token" content="{{csrf_token()}}">
         <title>typingPractice</title>
         @vite(['resources/js/app.js'])
         
@@ -14,7 +15,7 @@
         
         <h1>タイピング練習</h1>
         
-        <div id='timer'>00:00.00</div>
+        <div id='timer'>00:00</div>
         <!--<button id='start'>start</button>-->
         <button id='reset'>reset</button>
         
@@ -29,13 +30,12 @@
             let currentProblemIndex = 0;
             
             //タイマー系
+            var elapsed = 0;
             var display=document.getElementById("timer");
             var stopwatch=startStopwatch(display);
             
-            //var startButton=document.getElementById("start");
             var resetButton=document.getElementById("reset");
             
-            //startButton.addEventListener("click", stopwatch.start); 
             resetButton.addEventListener("click", stopwatch.reset); 
             
             window.onload=function(){

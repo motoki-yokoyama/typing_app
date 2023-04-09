@@ -12,6 +12,7 @@
                     {{ __("You're logged in!") }}
                 </div>
             </div>
+            <a href="{{ route('practice') }}" class="button"><ゲームを開始する></a>
         </div>
     </div>
 </x-app-layout>
