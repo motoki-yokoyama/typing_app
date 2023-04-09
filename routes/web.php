@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\QuestionController; 
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResultController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +22,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::controller(QuestionController::class)->middleware(['auth'])->group(function(){
-    Route::get('questions/practice','practice')->name('paractice');
+
+//未ログインのユーザーをリダイレクトする
+Route::middleware(['auth'])->group(function () {
+    //タイピングゲーム画面
+    Route::get('questions/practice',[QuestionController::class,'practice'])->name('practice');
+    
+    //結果保存
+    Route::post('/save-results', [ResultController::class, 'store']);
+    
+    //結果表示画面
+    Route::get('questions/result', [ResultController::class, 'result'])->name('result');
+    
+    //
 });
-
-
 
 
 Route::get('/dashboard', function () {

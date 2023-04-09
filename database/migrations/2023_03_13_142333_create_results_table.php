@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();//user_id
-            $table->time('time',$precision=0);//プレイ時間
-            $table->integer('success_count');//正タイプ数
-            $table->integer('miss_count');//誤タイプ数
+            $table->integer('time');//プレイ時間
+            $table->integer('total_characters');
+            $table->integer('success_count')->nullable();//正タイプ数
+            $table->integer('miss_count')->nullable();//誤タイプ数
             $table->timestamps();
         });
     }

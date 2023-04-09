@@ -1,9 +1,8 @@
 
-
 //タイマー系
 function startStopwatch(display) {
   var startTime = new Date().getTime();
-  var elapsed = 0;
+  //var elapsed = 0;
 
   // 時間を表示する関数
   function showTime() {
@@ -50,9 +49,11 @@ function startStopwatch(display) {
 function showProblem() {
   if (currentProblemIndex >= problems.length) {
     // 全問題が終了したら終了メッセージを表示する
+    stopwatch.stop(); // ストップウォッチを停止する
     $('#problem').text('全ての問題を終了しました');
     $('#answer').remove();
-    stopwatch.stop(); // ストップウォッチを停止する
+    
+    onFinish();
     return;
   }
 
@@ -85,3 +86,54 @@ function checkAnswer() {
   }
 }
 
+
+//結果送信
+function saveResults(totalCharacters,time){
+  
+  //CSRFトークンの取得
+  const csrfToken = document.querySelector('meta[name="csrf_token"]').getAttribute('content');
+  
+  $(document).bind("ajaxSend", function(c, xhr) {
+        $(window).bind( 'beforeunload', function() {
+                xhr.abort();
+        })
+  });
+  
+  $.ajax({
+    url:'/save-results',
+    type:'POST',
+    data:{
+      total_characters:totalCharacters,
+      time:time,
+      _token:csrfToken
+    },
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    success:function(response){
+      //alert('Success: ');
+      location.href='/questions/result';
+    },
+    error: function(xhr, status, error) {
+      if (data['statusText'] === 'abort') {
+                return;
+        }
+      // エラーが発生した場合、エラーメッセージをコンソールに表示
+      alert('error');
+    }
+  });
+}
+
+//入力文字数と経過時間の集計
+function onFinish(){
+  let totalCharacters=0;
+  //各問題の文字数を合計
+  for(let i=0;i<problems.length;i++){
+    totalCharacters += problems[i].length;
+  };
+  
+  let time = elapsed;
+  
+  //saveResult関数を呼び出し、文字数と時間をサーバに送る
+  saveResults(totalCharacters,time);
+}
