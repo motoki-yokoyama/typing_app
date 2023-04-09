@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->time('sum_play_time',$precision=0)->default(0);
+            $table->integer('sum_play_time',$precision=0)->default(0);
         });
     }
 
